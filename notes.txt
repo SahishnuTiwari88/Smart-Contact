@@ -1,0 +1,94 @@
+1. npm init-y(werunitinterminalanditcreatepackage.jsonfile)
+needtorun: npx tailwindcss -i ./src/main/resources/static/css/input.css -o ./src/main/resources/static/css/output.css --watch
+
+2. we need some information in all the pages so for that we can use fragment(allow us to use inhertance concept) for that we 
+use thymeleaf fragements(thymeleaf fragement need to study) fragement can be insert or replace
+3. In fragement we can pass argument also(this argument can be a variable or can be a html page itself)
+4. We need to apply flowbite and tailwind css to all the thymeleaf page
+tailwind css comes from output.css file need to include in href as (<link rel="stylesheet" data-th-href="@{'/css/output.css'}")
+and flowbite css as in <link href="" rel="stylesheet"/>
+
+<div>--> is host tag used to mention where we show fragement
+
+5. We can pass content also whether dynamic or static, we can pass anything dynamically like content, script,url
+in the specific page and then reflect it in the base page.
+Like in About page in html tag itself we use th:replace means it's content will be replace by the one it called
+<html th:replace = "~{base :: parent(~{::#content},~{::title})}  in About page and make such field in 
+<div id="content"><h1>Welcome to About Page</h1></div>  this content is referred above in replace part and directed to base page
+& in base page we have created a fragment for html 
+<html th:fragement="parent(content,title)" xmlns:th="http://www.thymeleaf.org">  and the content that we received here is
+printed as <title data-th-replace="${title}">SCM</title> and so on. So what it will do first it take info from
+About page pass it in #content then goes to base page it will be printed but reflected on same page we are calling.
+
+6. If we need to check if any information is there render that if not then render default
+   <th:block th:if="${content != null}">
+      <section th:replace="${content}"></section>
+    </th:block>
+    <th:block th:unless="${content != null}">
+      <section>
+        <p>This is default content for the base page.</p>
+      </section>
+    </th:block>
+
+
+    same for title also
+    <th:block th:if="${title != null}">
+      <title th:replace="${title}">Base Page</title>
+    </th:block>
+    <th:block th:if="${title == null}">
+      <title>Base Page</title>
+    </th:block>
+
+
+7. To use dark/light icon we need to add the cdn link for font awesome    
+
+8. In form action we mention the url like "@{'/do-register}" and the method which shows where we have to redirect the request
+   method post means data will go as request body not as part of url
+
+9. we make a UserForm.java object to receive data in /register endpoint in the controller and same used in signup page 
+so data filled automatically.
+We can directly use fields from object using * i.e. to access name we use th:field="*{name}"
+when click signup then submit will work and sends entire data to /register endpoint in controller
+
+
+NOTE: when using builder to save data from UserForm to User default value like Provider(SELF) will not get 
+saved so we need to use traditional way of storing data as User user = new User(); then save each field
+
+when we use 'RedirectAttributes redirectAttributes' then in that case we can directly access the message just by mentioning
+key as "${message}" nothing else need to mention in html page
+
+For validation purpose we add a dependency in pom.xml i.e. hibernate validator(Spring-boot-starter-validator) and used some Annotations
+like @NotBlank,@Size,@Email  we need to add all these in the Entity class(UserForm.Java) we are validating
+After that we need to go to the controller which handle the above Entity then use @Valid before
+@ModelAttribute and also use 'BindingResult' as it is used to check for the error in the Entity.
+If it has any error we can return it to same page i.e. 'signup.html' and also show the message on the same page.
+
+To remove client side validation in form tag we add 'novalidate'
+
+SECURING URL's/ENDPOINTS(users)-->
+securing url's/endpoints which are starting with user it can only be accessible if user login
+For Login we create our own login page and want only user who register only they can login.
+Just by adding Spring-Security in pom.xml it will secure all pages by default and password will 
+generate in console like (e6616aeb-9860-44b5-b3dd-8ee1ad580fc7) and username will be 'user' but we
+don't want it, so in that case we can define/configure our own username and password in application.properties file as
+like (spring.security.user.name=sarvesh) & (spring.security.user.password=sarvesh) now we have configure both
+username and password to 'sarvesh'
+
+
+ UserDetails user = User
+        .withUsername("admin123")
+        .password("admin123")
+        .roles("ADMIN","USER")
+        .build(); 
+In above code we have not used any password encoder so we are getting below error       
+java.lang.IllegalArgumentException: Given that there is no default password encoder configured, 
+each password must have a password encoding prefix. Please either prefix this password with
+'{noop}' or set a default password encoder in `DelegatingPasswordEncoder`.
+for local testing purpose we can use 'withDefaultPasswordEncoder()' which is depricated and not recommended
+if we use 'withDefaultPasswordEncoder()' then replace 'withUsername()' to 'username()'
+
+//from DB-->
+When we use DB to get user info for login, we can do this using authentication provider
+there are 2 approach to do it 
+1- create a separate CustomUserDetailsService implements UserDetailsService(recommende b/c clean code)
+2- The entity class directly implements 'UserDetails' and provide implementation for method present in 'UserDetails'
