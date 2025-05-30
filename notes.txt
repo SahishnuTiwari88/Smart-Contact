@@ -90,5 +90,58 @@ if we use 'withDefaultPasswordEncoder()' then replace 'withUsername()' to 'usern
 //from DB-->
 When we use DB to get user info for login, we can do this using authentication provider
 there are 2 approach to do it 
-1- create a separate CustomUserDetailsService implements UserDetailsService(recommende b/c clean code)
+1- create a separate CustomUserDetailsService implements UserDetailsService(recommende b/c clean code) we follow this
 2- The entity class directly implements 'UserDetails' and provide implementation for method present in 'UserDetails'
+
+
+Now on basis of above configuration/changes we are not going to configure the URL's and do security
+related configuration.
+After that configure security filter chain to make sure some pages are secured and some are not as 'SecurityFilterChain'
+this bean is very important b/c it will help in security configuration it takes 'HttpSecurity' and this helps in
+entire security configuration
+
+formLogin(form -> form
+          .loginPage("/login")             // custom login page (optional)
+          .defaultSuccessUrl("/dashboard") // where to go after successful login
+          .permitAll()
+      )
+if above user is authenticated from AuthenticationProvider then securityfilterchain start and 
+if it is valid 'dashborad' will be shown if not correct detail then it will show login page itself.
+
+FLOW-->
+Login form → AuthenticationProvider → UserDetailsService → Password validation
+→ If valid → SecurityFilterChain allows access → /dashboard
+→ If invalid → back to /login with error.
+
+When we use 'authenticated()' with any url then user need to login, if details correct can access allowed page or
+again go to login page
+httpSecurity.formLogin(Customizer.withDefaults()); it will gives default login page from spring security
+here we can change formLogin configuration so that it will point to our own form
+
+IF WE MAKE CUSTOME LOGIN FORM AND TRY TO LOGIN STEPS INVOLVED---->
+when user tries to access /user/** then login form will open because not authenticated ✅
+then on login page we provide username and password ✅
+which goes to usernameParameter and passwordParameter ✅
+then submitted at loginProcessingUrl(/authenticate) ✅
+then it goes to AuthenticationProvider ✅
+gets userdetailservice and all its info ✅
+and compares raw password from form with the one from DB ✅
+if match then AuthenticationProvider returns object held by spring context ✅
+used internally for authentication and security filter chain ✅
+if details correct then successForwardUrl triggers ✅
+else failureForwardUrl with error query param ✅
+
+NOTE --> 
+When we make our own custom login page then in that case we need to make our own 
+i.e. customize logout url(it needs to handle)
+ httpSecurity.logout(formOut->{
+            formOut.logoutUrl("/logout");
+            //once logout return it to login success url
+            formOut.logoutSuccessUrl("/login?logout=true");
+         });
+if we configure logout(by default logout as mentioned above) it will not work b/c CSRF protection is there
+which is enable (by default) so for that we need to hit POST method. So we can disable CSRF then any http request
+like get,post etc will work. We can disable CSRF as 'httpSecurity.csrf().disable();'
+and also for showing error message like invalid username and password or logout success on login page we don't
+need to configure anything as it will be taken care automatically by spring security we just need to mention the
+paragraph for error and logout like           

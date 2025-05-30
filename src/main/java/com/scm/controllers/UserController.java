@@ -2,6 +2,7 @@ package com.scm.controllers;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
@@ -9,7 +10,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class UserController {
 
     // user dashboard page
-    @GetMapping("/dashboard")
+   // @PostMapping("/dashboard")
+   @RequestMapping(value = "/dashboard")
     public String userDashboard() {
         return "user/dashboard"; // user folder and dashboard page
     }

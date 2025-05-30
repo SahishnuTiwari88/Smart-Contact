@@ -92,7 +92,7 @@ public class PageController {
 
         // builder pattern
         User user = User.builder().name(userForm.getName()).email(userForm.getEmail()).password(userForm.getPassword())
-                .about(userForm.getAbout()).phoneNumber(userForm.getPhoneNumber()).build();
+                .about(userForm.getAbout()).phoneNumber(userForm.getPhoneNumber()).enabled(true).profilePic("http://goggle.com").build();
         userService.saveUser(user);
         System.out.println("User Saved " + user);
 

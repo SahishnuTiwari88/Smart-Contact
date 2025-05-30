@@ -52,7 +52,8 @@ public class User implements UserDetails {
 
     private String phoneNumber;
     // additional info
-    private boolean enable = true; // to check user active or not(by default false i.e.not active)
+    @Getter(value = AccessLevel.NONE)
+    private boolean enabled = false; // to check user active or not(by default false i.e.not active)
 
     private boolean emailVerified = false;
 
@@ -106,7 +107,7 @@ public class User implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return this.enable;
+        return this.enabled;
     }
 
     @Override

@@ -6,8 +6,105 @@
   <!-- <title>About Page</title> -->
   <body>
     <div id="content">
-        <h1>Welcome to Login Page</h1>
-        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Est, dolores!</p>
+      <div class="grid grid-cols-12">
+        <div class="col-span-4 md:col-span-2 lg:col-span-3 xl:col-span-4"></div>
+        <div class="col-span-12 md:col-span-8 lg:col-span-6 xl:col-span-4">
+          <!--Card-->
+          <div
+            class="block mt-4 p-6 bg-white border-t-8 border-b-8 border-green-600 rounded-lg shadow-sm hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700"
+          >
+            <img
+              img
+              class="w-28 h-28 object-contain rounded-t-lg mx-auto"
+              data-th-src="@{'/images/login.png'}"
+              alt="Signup"
+            />
+            <!-- Success message here-->
+            <!-- <div class="mt-5" data-th-replace="~{message :: message}"></div> -->
+            <div data-th-if="${param.error}"
+              class="text-red-600 text-center px-1 py-2"
+            >Invalid Username or Password</div>
+
+            <div data-th-if="${param.logout}"
+              class="text-green-600 text-center px-1 py-2"
+            >Logout Successfull</div>
+
+            <h5
+              class="w-full text-center mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white"
+            >
+              Login Here
+            </h5>
+            <!--this is the form-->
+            <form
+              data-th-action="@{'/authenticate'}"
+              method="post"
+              class="mt-2"
+            >
+              <!-- Email now as username-->
+              <div class="mb-3">
+                <label
+                  for="email"
+                  class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                  >Email</label
+                >
+
+                <input
+                  name="email"
+                  type="email"
+                  id="email"
+                  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  placeholder="xyz@gmail.com"
+                  required
+                />
+                <!-- <div
+                  data-th-if="${#fields.hasErrors('email')}"
+                  data-th-errors="*{email}"
+                  class="text-red-600 px-1 py-2"
+                ></div> -->
+              </div>
+              <!-- Password-->
+              <div class="mb-3">
+                <label
+                  for="password"
+                  class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                  >Password</label
+                >
+                <input
+                  name="password"
+                  type="password"
+                  id="password"
+                  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  required
+                />
+                <!--password error if any-->
+                <!-- <div
+                  data-th-if="${#fields.hasErrors('password')}"
+                  data-th-errors="*{password}"
+                  class="text-red-600 px-1 py-2"
+                ></div> -->
+              </div>
+
+              <!--Button-->
+              <div class="mb-3 flex justify-center space-x-3">
+                <button
+                  type="submit"
+                  class="px-3 py-2 rounded bg-gray-800 text-white dark:bg-blue-700 dark:hover:bg-blue-600 hover:bg-gray-900"
+                >
+                  Login
+                </button>
+
+                <!--Reset Button-->
+                <button
+                  type="reset"
+                  class="px-3 py-2 rounded bg-yellow-900 text-white hover:bg-orange-900 dark:bg-blue-700 dark:hover:bg-blue-600"
+                >
+                  Reset
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
     </div>
   </body>
 </html>
