@@ -29,6 +29,9 @@ public class SecurityConfig {
     @Autowired
     private CustomUserDetailsService customUserDetailsService;
 
+    @Autowired
+    private OAuthAuthenticationSuccessHandler oauthSuccessHandler;
+
     /*
      * 1. // user create and login using java code with in-memory service i.e. hard
      * coding
@@ -125,6 +128,16 @@ public class SecurityConfig {
             formOut.logoutUrl("/logout");
             //once logout return it to login success url
             formOut.logoutSuccessUrl("/login?logout=true");
+         });
+
+         //OAuth configuration(it will give default login page for google login)
+         //default property of Oauth, it will not show login page
+        // httpSecurity.oauth2Login(Customizer.withDefaults()); 
+
+         //in order to show login page and provider options like google and github we use
+         httpSecurity.oauth2Login(oauth->{
+            oauth.loginPage("/login");
+            oauth.successHandler(oauthSuccessHandler);
          });
 
         return httpSecurity.build();

@@ -144,4 +144,52 @@ which is enable (by default) so for that we need to hit POST method. So we can d
 like get,post etc will work. We can disable CSRF as 'httpSecurity.csrf().disable();'
 and also for showing error message like invalid username and password or logout success on login page we don't
 need to configure anything as it will be taken care automatically by spring security we just need to mention the
-paragraph for error and logout like           
+paragraph for error and logout like   
+
+<div data-th-if="${param.logout}"
+              class="text-green-600 text-center px-1 py-2"
+            >Logout Successfull</div>
+
+NOW WE ARE GOING TO MAKE LOGIN WITH GOOGLE OPTION :--->(We use OAuth2 for this)
+
+In modern application we do login with Google,Github,FaceBook because it makes login faster and user don't have 
+to spent more time for login purpose
+1. We need to add OAuth2 client dependency
+2. OAuth already has security in it so if we want we can remove spring-security also.
+3. After adding OAuth2 every thing is auto-configured, but need to add some properties to enable the auto-configuration
+like what provider you use(google,github etc),it's client id, client secret(i.e. if we use Google then we need it's id and secret)
+for that we need to go to google console first(google.cloud.console)
+STEPS-->
+go to 'google.cloud.console' -->create new project-->select the project-->menu-->click Api & services
+-->'credentials and OAuth consent screen these 2 options are needed-->select external
+
+in scopes select '/auth/userinfo.email' '/auth/userinfo.profile' &'openid'
+then we create 'create credentials'-->OAuth client id(Application type-->Web Application)-->AppName then
+'Authorized JavaScript origins-->click add uri and add the localhost then to which uri google will redirect, there is
+one uri by default we need to mention or else it will give uri mismatch issue
+'Authorized redirect URIs--> 'http://localhost:8080/login/oauth2/code/google' we can change it later if we want
+it can be change in application.properties file once change we will update above url with our own custom url.
+Then we go to application.properties file to configure our 'client id' & 'client secret' for OAuth2 configuration
+we can mention scopes(permission) for email and profile also, else default permission will be enabled.
+After doing all this go to 'SecurityConfig.java' to configure OAuth2 so that we can login using google account.
+But in that case our login page that we have configured so that user can login using username & password will not appear.
+So we have to login page in such way that it gives all login options i.e. login page itself so that user can login using
+username & password , and also it will show all metion providers like Google, Github, FaceBook etc.
+So when we make our own custom button gor Google, GIthub etc we need the url to which it direct on click
+'<a href="/oauth2/authorization/google">google</a>' for google.
+In order to show login page with google and github option also we replace
+'httpSecurity.oauth2Login(Customizer.withDefaults());' with 'httpSecurity.oauth2Login(oauth->{
+  oauth.loginPage('/login')
+});
+
+After login with Google we want to redirect to a particular page, and want to make function/method which gives User entire data
+like image,pic,mail etc and we can save that in a packet with provider
+
+DefaultOAuth2User user = (DefaultOAuth2User) authentication.getPrincipal();
+        log.info(user.getName());
+        user.getAttributes().forEach((key,value)->{
+            log.info("KEY "+key+ "VALUE "+value);
+        });
+        log.info(user.getAuthorities().toString());
+we use above to log user info and in order to save it to DB we fetch each field and then save it to DB.
+        
