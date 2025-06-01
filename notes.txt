@@ -192,4 +192,19 @@ DefaultOAuth2User user = (DefaultOAuth2User) authentication.getPrincipal();
         });
         log.info(user.getAuthorities().toString());
 we use above to log user info and in order to save it to DB we fetch each field and then save it to DB.
-        
+
+
+OAUTH2 LOGIN USING GITHUB-->
+We need github client-id and client-secret for that we login to the github and go to 'Developer Setting' option i.e.
+Signin github-->setting-->Developer Setting-->Github Apps-->New github app(click & create) then give app name,give review
+and provide homepage url(http://localhost:8080), then 'callback url' as 'http://localhost:8080/login/oauth2/code/github' then
+uncheck webhook, we go to Account setting and allow email adderess->real only and profile->read & write
+Working with Github is not complex but we need to make sure which provider we are working with because there is chance like
+some attributes available to google might not be available in github.
+SO we first check the provider we are using, based on the provider we fetch the attributes and use, but first we must create login
+button for github
+
+When we are using different provider then in that case we need to identify the provider for that we use the
+'authentication and typecast it to OAuth2AuthenticationToken' and from that we fetch 'getAuthorizedClientRegistrationId'
+
+when used google we get 'name,picture,email' and for github we get 'login,avatar_url,email'
