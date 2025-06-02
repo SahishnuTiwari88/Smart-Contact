@@ -1,13 +1,22 @@
 package com.scm.controllers;
 
+import java.security.Principal;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.scm.helper.Helper;
+
 @Controller
 @RequestMapping("/user")
 public class UserController {
+
+    private Logger log = LoggerFactory.getLogger(UserController.class);
 
     // user dashboard page
    // @PostMapping("/dashboard")
@@ -18,7 +27,10 @@ public class UserController {
 
     // user profile page
     @GetMapping("/profile")
-    public String userProfile() {
+    public String userProfile(Authentication authentication) {
+         String emailOfLoggedInUser = Helper.getEmailOfLoggedInUser(authentication);
+         log.info("User logged in: {} ",emailOfLoggedInUser);
+         //once we get user email above then we can fetch user detail frim DB
         return "user/profile"; // user folder and dashboard page
     }
 
