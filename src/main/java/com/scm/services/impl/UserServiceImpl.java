@@ -31,13 +31,13 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User saveUser(User user) {
-        //we need to generate userId dynamically before saving
+        // we need to generate userId dynamically before saving
         String userId = UUID.randomUUID().toString();
         user.setUserId(userId);
-        //set password encoder
+        // set password encoder
         user.setPassword(passwordEncoder.encode(user.getPassword()));
 
-        //set default role for user
+        // set default role for user
         user.setRoleList(List.of(AppConstants.ROLE_USER));
         log.info("User info saved to database");
         return userRepo.save(user);
@@ -87,13 +87,18 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public boolean isUserExistByEmail(String email) {
-       User userEmail = userRepo.findByEmail(email).orElse(null);
-       return userEmail != null ? true : false;
+        User userEmail = userRepo.findByEmail(email).orElse(null);
+        return userEmail != null ? true : false;
     }
 
     @Override
     public Optional<List<User>> getAllUsers() {
         return Optional.of(userRepo.findAll());
+    }
+
+    @Override
+    public User getUserByEmail(String email) {
+        return userRepo.findByEmail(email).orElse(null);
     }
 
 }

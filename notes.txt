@@ -208,3 +208,56 @@ When we are using different provider then in that case we need to identify the p
 'authentication and typecast it to OAuth2AuthenticationToken' and from that we fetch 'getAuthorizedClientRegistrationId'
 
 when used google we get 'name,picture,email' and for github we get 'login,avatar_url,email'
+
+IF WE WANT LOGGED IN USER INFO ON ALL PAGE -->
+“If we want logged-in user info to be visible on all pages:
+we make a method inside the controller and annotate it with @ModelAttribute.
+It gets called automatically before any controller method,
+the returned object is added to the model under the given key,
+and then the controller proceeds to return the view. ✅”
+
+✔️ Correct in every way.
+
+🔁 Behind the Scenes – How it works:
+✅ You define this in the controller:
+
+java
+Copy
+Edit
+@ModelAttribute("loggedUser")
+public User getUser(Authentication authentication) {
+    return userService.getByEmail(authentication.getName());
+}
+
+Above code is only applicable if we have to return single data. But if we need to return/map multiple data then we pass model
+with authentication as mention below
+@ModelAttribute
+public void populateCommonData(Authentication authentication, Model model) {
+    User user = userService.getByEmail(authentication.getName());
+    model.addAttribute("loggedUser", user);
+    
+    // Add more data if needed
+    model.addAttribute("appVersion", "v1.2.3");
+}
+
+✅ Spring automatically calls this method before each request-handling method like @GetMapping, @PostMapping, etc.
+
+✅ The return value (User object) is added to the model under the key "loggedUser".
+
+✅ The @GetMapping or @PostMapping method then runs and returns a view like "dashboard".
+
+✅ The Thymeleaf template can access ${loggedUser.name} (or whatever field you want).
+
+If in case we want logged-in user info to be displayed on all page then we can create a root file 
+marked it as @ControllerAdvice and mention below code there so it will work for all end points
+@ModelAttribute
+    public void loggedInUser(Model model,Authentication authentication){
+        String emailOfLoggedInUser = Helper.getEmailOfLoggedInUser(authentication);
+        log.info("User logged in: {} ", emailOfLoggedInUser);
+         User user = userService.getUserByEmail(emailOfLoggedInUser);
+        log.info(user.getAbout());
+        log.info(user.getUserId());
+        log.info(user.getEmail());
+        log.info(user.getAuthorities().toString());
+        model.addAttribute("userDetail", user);
+    }
