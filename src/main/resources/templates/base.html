@@ -10,8 +10,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title data-th-replace="${title}">Base Page</title>
     <link rel="stylesheet" data-th-href="@{'/css/output.css'}" />
-     <!-- CSS for google login button-->
-     <link rel="stylesheet" data-th-href="@{'/css/style.css'}" />
+    <!-- CSS for google login button-->
+    <link rel="stylesheet" data-th-href="@{'/css/style.css'}" />
     <link
       href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.css"
       rel="stylesheet"
@@ -30,8 +30,15 @@
     /> -->
   </head>
   <body class="dark:bg-gray-900 bg-gray-100 dark:text-white">
-    <!--Navbar-->
-    <div data-th-replace="~{navbar :: navbar}"></div>
+    <!-- Navbar for logged in user-->
+    <div data-th-if="${userDetail}">
+      <div data-th-replace="~{user/user_navbar :: user-navbar}"></div>
+    </div>
+    
+    <!--Common Navbar if user not logged in-->
+    <div data-th-unless="${userDetail}">
+      <div data-th-replace="~{navbar :: navbar}"></div>
+    </div>
 
     <!--main content-->
     <section data-th-replace="${content}"></section>

@@ -1,13 +1,24 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>User Profile</title>
-</head>
-<body>
-    <h1>User Profile Page</h1>
-    <h1 data-th-text="${userDetail.name}"></h1>
-    <h1 data-th-text="${userDetail.email}"></h1>
-</body>
+<html lang="en" data-th-replace="~{base :: parent(~{::#content},~{::title})}">
+  <head>
+    <title data-th-text="${userDetail.name}">Profile Page</title>
+  </head>
+  <!-- <title>About Page</title> -->
+  <body>
+    <div id="content">
+      <!--If user loggedin include the sidebar, passing sidebar specific for Profile and dashboard so it need to send separetky-->
+      <div data-th-if="${userDetail}">
+        <div data-th-replace="~{user/sidebar :: sidebar}"></div>
+      </div>
+
+      <div class="sm:pl-64 pt-20 px-4" style="height: 1000px">
+        <h1 class="text-5xl">Welcome to Profile Page</h1>
+        <p>
+          Lorem ipsum dolor sit amet consectetur adipisicing elit. Est, dolores!
+        </p>
+      </div>
+    </div>
+  </body>
 </html>
+
+<!--We have used  pt-16 px-4 so that content will not hide under navbar-->

@@ -261,3 +261,41 @@ marked it as @ControllerAdvice and mention below code there so it will work for 
         log.info(user.getAuthorities().toString());
         model.addAttribute("userDetail", user);
     }
+
+
+    CREATING ADMIN DASHBOARD USING TAILWIND CSS (DESIGN PROFILE & DASHBOARD PAGE)-->
+    We will create a separate navbar for user(when logged in), we make user_navbar.html page that will rendered
+    the navbar, so we need to change base page navbar based on condition like if user logge-in we want different 
+    navbar, if not logged-in we want the older navbar. If user is logged in we render navbar with username and logout(user_navbar.html)
+    in order to mention logout option we just mention ' data-th-href="@{'/logout'}"' and it will be handle automaticaaly because
+    Spring security provide logout by default we just have to map to it.
+    and when not logged in we show base navbar(navbar.html)
+
+    <!-- Navbar for logged in user-->
+    <div data-th-if="${userDetail}">
+      <div data-th-replace="~{user/user_navbar :: user-navbar}"></div>
+    </div>
+    <!--Common Navbar if user not logged in-->
+    <div data-th-unless="${userDetail}">
+      <div data-th-replace="~{navbar :: navbar}"></div>
+    </div>
+
+After this we are going to add sidebar so create one sidebar.html <aside> tag to represent sidebar
+To make sidebar and other content separate from each other we need to find width of side bar content(which is w-64)
+and then need to mention padding for same width in user_navbar.html(pl-64) because sidebar only visible when user is loggedin
+so that content can be apart.
+If content increase like '<div id="content" style=" height: 1000px">' then navbar(user_navbar) moves up but we want to fix
+it so that only content move up while navbar remains fixed we do it using 'fixed w-full top-0 left-0 right-0' in user_navbar.html
+
+WE WANT TO SHOW SIDEBAR ONLY FOR DASHBOARD & PROFILE ON LOGIN-->
+we will mention side bar in Profile and Dashboard page itself as
+<!--If user loggedin include the sidebar-->
+    <div data-th-if="${userDetail}">
+      <div data-th-replace="~{user/sidebar :: sidebar}"></div>
+    </div>
+
+We have fixed button for user profile and logout so that it can be fixed according to screen
+1. class="hidden md:flex  // by default hidden and available for medium and large screen
+2. Add same button in list in navbar and use ' class="md:hidden' means after medium screen it should be hidden
+
+After making all these changes now go to sidebar.html and map required fields there like 'Dashboard','Profile' etc
