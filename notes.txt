@@ -299,3 +299,12 @@ We have fixed button for user profile and logout so that it can be fixed accordi
 2. Add same button in list in navbar and use ' class="md:hidden' means after medium screen it should be hidden
 
 After making all these changes now go to sidebar.html and map required fields there like 'Dashboard','Profile' etc
+
+NOW WE MAKE ADD CONTACT FORM-->
+1. First create contactcontroller, and only logged in user can perform any operation related to contact(add,delete etc)
+so we need to protect the route here (like same we did for user endpoint in security filter chain), so we can mention other 
+route in security filter chain or in 'contactcontroller' just mention endpoint starting with '/user/contacts' so that it will
+automatically protected and no need to create a separate protected url.
+Then we make add_contact.html to add the contacts.
+In order to create to input field side by side we add '<div> 2 divs inside mention div <div>' in first mention class='flex and space-x-3 
+to separate' and second <div> mention 'w-full'

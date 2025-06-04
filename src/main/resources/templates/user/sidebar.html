@@ -67,21 +67,11 @@
       <!-- Inbox -->
       <li>
         <a
-          href="#"
+          data-th-href="@{/user/contacts/add}"
           class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
         >
-          <svg
-            class="shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
-            xmlns="http://www.w3.org/2000/svg"
-            fill="currentColor"
-            viewBox="0 0 20 20"
-          >
-            <path
-              d="M2 3a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v6h-6a2 2 0 0 0-2 2v6H4a2 2 0 0 1-2-2V3z"
-            />
-            <path d="M14 11v6l4-4v-6h-4z" />
-          </svg>
-          <span class="ms-3">Inbox</span>
+          <span><i class="fa-solid fa-plus w-5 h-5"></i></span>
+          <span class="ms-3">Add Contact</span>
         </a>
       </li>
 
@@ -91,17 +81,8 @@
           href="#"
           class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
         >
-          <svg
-            class="shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
-            xmlns="http://www.w3.org/2000/svg"
-            fill="currentColor"
-            viewBox="0 0 20 20"
-          >
-            <path
-              d="M10 10a4 4 0 1 0-4-4 4 4 0 0 0 4 4zM2 18a6 6 0 0 1 12 0H2z"
-            />
-          </svg>
-          <span class="ms-3">Users</span>
+          <span><i class="fa-solid fa-address-book"></i></span>
+          <span class="ms-3">View Contact</span>
         </a>
       </li>
 

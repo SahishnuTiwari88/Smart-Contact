@@ -31,6 +31,9 @@ public class Contact {
     private String picture;
     private String description;
     public boolean favorite=false;
+    //social link added later
+    private String faceBook;
+    private String linkedeIn;
     //social link
     @OneToMany(mappedBy = "contact", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<SocialLink> socialLink;
