@@ -1,0 +1,38 @@
+Note: Understanding of Contact.java and ContactForm.java
+
+**Contact.java** is an Entity class used for database operations.
+It represents the structure of the database table and may contain extra fields like id, createdAt, etc., which we don’t want users to input directly.
+
+**ContactForm.java** is a DTO (Data Transfer Object) used to accept input from the user, typically through a form.
+It includes only the fields needed from the user, and we apply validation annotations like @NotBlank, @Email, and @Size to ensure the data is valid.
+
+The user input is bound to ContactForm.java, validated, and then converted to Contact.java before saving it to the database.
+
+This approach follows best practices like separation of concerns, security, and clean architecture.
+
+SIMPLE WORD:--->
+**Contact.java** is used for database-related operations and is handled in the service and repository layers.
+
+**ContactForm.java** is used to:
+
+Define which fields we want from the user
+
+Apply validation annotations like @NotBlank, @Email, etc.
+
+Bind user input to this class
+
+Later convert to Contact.java and save it to the database
+
+NOTE-->
+Yes, ContactForm can have different field names than Contact.
+But you must manually map the fields when converting.
+Like in contact.java if i have a field as name then in contactForm.java i can mention the same
+field with different name like userName. All we need to do is mapping when saving contactForm info to DB using
+contact.java like
+
+Contact contact = new Contact();
+
+// Mapping fields from ContactForm to Contact
+contact.setName(contactForm.getUserName()); // form field → entity field
+contact.setEmail(contactForm.getEmail());
+contact.setMessage(contactForm.getMessage());
