@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-th-replace="~{base :: parent(~{::#content},~{::title})}">
+<html lang="en" data-th-replace="~{base :: parent(~{::#content},~{::title},~{::script})}">
   <head>
     <title data-th-text="${userDetail.name}">Dashboard Page</title>
   </head>
@@ -18,6 +18,9 @@
         </p>
       </div>
     </div>
+    <script>
+      console.log("this is dashboard page");
+    </script>
   </body>
 </html>
 

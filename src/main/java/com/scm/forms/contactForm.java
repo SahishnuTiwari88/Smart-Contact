@@ -27,7 +27,7 @@ public class contactForm {
     private String email;
 
     @NotBlank(message = "Contact Required")
-    //@Size(min = 10, max = 12, message = "Invalid Phone Number")
+    // @Size(min = 10, max = 12, message = "Invalid Phone Number")
     @Pattern(regexp = "^[0-9]{10}$", message = "Invalid Phone Number")
     private String phoneNumber;
 
@@ -37,9 +37,11 @@ public class contactForm {
     @NotBlank(message = "Provide Contact Information")
     private String description;
 
-    
     private boolean favorite;
     private String website;
     private String linkedIn;
-    private String profileImage;
+
+    // for this file we will create an annotation which will validate the file i.e.
+    // resolution & size of the file
+    private MultipartFile contactImage;
 }

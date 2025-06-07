@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-th-replace="~{base :: parent(~{::#content},~{::title})}">
+<html lang="en" data-th-replace="~{base :: parent(~{::#content},~{::title},~{::script})}">
   <head>
     <title>Login Page</title>
   </head>
@@ -138,5 +138,8 @@
         </div>
       </div>
     </div>
+    <script>
+      console.log("Login page");
+    </script>
   </body>
 </html>

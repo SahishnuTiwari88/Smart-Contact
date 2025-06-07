@@ -36,6 +36,10 @@ public class Contact {
     //social link added later
     private String website;
     private String linkedeIn;
+    
+    //we use this b/c if in future if we want to do any transformation, it can be done b/c hardcoded url in DB
+    private String cloudinaryImagePublicId;
+
     //social link
     @OneToMany(mappedBy = "contact", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<SocialLink> socialLink;

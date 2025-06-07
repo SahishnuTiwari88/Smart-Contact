@@ -1,5 +1,8 @@
 <!DOCTYPE html>
-<html lang="en" data-th-replace="~{base :: parent(~{::#content},~{::title})}">
+<html
+  lang="en"
+  data-th-replace="~{base :: parent(~{::#content},~{::title},~{::script})}"
+>
   <head>
     <title>Add Contact</title>
   </head>
@@ -25,7 +28,7 @@
                 alt="Signup"
               />
               <!--success contact added msg-->
-               <div class="mt-5" data-th-replace="~{message :: message}"></div>
+              <div class="mt-5" data-th-replace="~{message :: message}"></div>
               <h5
                 class="w-full text-center mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white"
               >
@@ -37,6 +40,7 @@
                 class="mt-2"
                 method="post"
                 data-th-object="${contactForm}"
+                enctype="multipart/form-data"
                 novalidate
               >
                 <div class="mb-2">
@@ -202,10 +206,20 @@
                     >Upload Contact Image</label
                   >
                   <input
+                    id="image_file_input"
                     class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
-                    data-th-field="*{profileImage}"
+                    data-th-field="*{contactImage}"
                     type="file"
                   />
+                  <!-- To show upload image preview -->
+                  <div class="flex justify-center mt-3">
+                    <img
+                      src=""
+                      id="upload_image_preview"
+                      alt=""
+                      class="w-80 max-w-full h-auto rounded-xl shadow-lg border-2 border-gray-300"
+                    />
+                  </div>
                 </div>
                 <!--Favorite contact checkbox-->
                 <div>
@@ -244,6 +258,10 @@
         </div>
       </div>
     </div>
+    <script data-th-src="@{'/js/admin.js'}"></script>
+    <script>
+      console.log("This is add_contact");
+    </script>
   </body>
 </html>
 

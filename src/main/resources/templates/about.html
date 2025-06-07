@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-th-replace="~{base :: parent(~{::#content},~{::title})}">
+<html lang="en" data-th-replace="~{base :: parent(~{::#content},~{::title},~{::script})}">
   <head>
     <title>About Page</title>
   </head>
@@ -9,5 +9,8 @@
         <h1>Welcome to About Page</h1>
         <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Est, dolores!</p>
     </div>
+    <script>
+      console.log("about page script");
+    </script>
   </body>
 </html>

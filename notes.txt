@@ -308,3 +308,58 @@ automatically protected and no need to create a separate protected url.
 Then we make add_contact.html to add the contacts.
 In order to create to input field side by side we add '<div> 2 divs inside mention div <div>' in first mention class='flex and space-x-3 
 to separate' and second <div> mention 'w-full'
+
+
+NOTE---> 
+We can print error log from binding result using
+result.getAllErros().forEach(error->log.info(error.toString()));
+
+NOT WE ARE GOING TO PROCESS AND VALIDATE THE IMAGE IN CONTACTFORM--->
+STEPS-->
+1. Process image
+2. Validate image using custom validator(resolution,file size)
+3. receive image and save it to cloud
+4. url from cloud stored in DB
+5. Preview of the image
+
+At start we will see how to receive a file save it's url to DB,and save to cloud
+
+if we are uploading any file then in form we need to add 'enctype="multipart/form-data"' else it will cause issue
+We will implement an imageService and write there code to upload image on the 'cloudnary'
+which return url of uploaded image.
+STEPS CLOUDNARY-->
+1. Login to cloudnary
+2. All SDK's select one for Java(we have dependency for pom.xml)
+add, <dependency>
+    <groupId>com.cloudinary</groupId>
+    <artifactId>cloudinary-http5</artifactId>
+    <version>2.0.0</version>
+</dependency>
+
+We need cloudnary bean so we create cloudnary bean in AppConfig.java 
+After that we mention dev profile in application.properties file
+If we want we can read original file name and map it to 'public_id' but we don't do that
+instead we use 'fileName' which is randomly generated
+cloudinary.uploader().upload(data, ObjectUtils.asMap(
+                "public_id",fileName
+            ));
+            this will upload the file, web can pass above fileName from controller itself, so that it will also get saved
+
+From here we can directly return file name if we want, but we will create a method which will
+give the url not the file name   
+
+ @Override
+    public String getUrlFromPublicId(String publicId) {
+        return cloudinary.url().transformation(new Transformation<>(
+
+        )).generate(publicId);
+    }
+
+Now we want to show the preview of the picture that we are uploading on the cloudinary, for that we need to
+write some Java Script in the 'add_contact,html'
+just below image we add--
+ <!-- To show upload image preview -->
+<img src="" id="upload_image_preview" alt=""> by default it is blank(alt="") b/c initially we have not selected any image
+and as soon as we select any image it will be replace in the above image tag, for that we need to write JavaScript
+so we create a 'admin.js' file and it will only visible to the logged in user
+and need to include that script in <script> tag in add_contact.html
