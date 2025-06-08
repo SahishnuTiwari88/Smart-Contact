@@ -363,3 +363,12 @@ just below image we add--
 and as soon as we select any image it will be replace in the above image tag, for that we need to write JavaScript
 so we create a 'admin.js' file and it will only visible to the logged in user
 and need to include that script in <script> tag in add_contact.html
+
+NOW WE ARE GOING TO SHOW THE CONTACTS-->
+We need to get current logged in user and show the contact on the contact page.
+Then we use,  data-th-each="c : ${contacts}" to get contacts from model
+                    data-th-object="${c}", make above c as object so that we can access fields directly without using 'c.name'
+
+If we get picture then we use ' data-th-src="*{picture}"' to show on browser or else we mention default picture onerror load
+Similarly we mention all info that we want to show.
+In the form we will delete,update and view the contact details for that we will use icons.
