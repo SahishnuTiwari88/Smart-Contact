@@ -436,3 +436,7 @@ At that time, contacts.getNumber() will mention current page number,
 and as soon as I click previous, page number reduces by 1 because we mention contacts.getNumber() - 1,
 and it takes me to the previous page.
 data-th-classappend="${index == contacts.getNumber() ? 'bg-blue-400' :'bg-white'}" highligt the page number
+
+NOW WE ARE GOING TO SEARCH CONTACT BASED ON NAME,EMAIL,CONTACT-->
+For that we first we search 'multiple options' on flowbite take it and paster it in contact.html then make a search
+button so that we can search based on name,phone,email

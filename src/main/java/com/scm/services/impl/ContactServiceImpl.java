@@ -1,5 +1,6 @@
 package com.scm.services.impl;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -57,10 +58,19 @@ public class ContactServiceImpl implements ContactService {
         // or we can first find by id then pass entity to delete
     }
 
+    //search contact based on field(name,email,phone) and keyword(actual data passed)
     @Override
-    public List<Contact> search(String name, String email, String phoneNumber) {
-        // we can search data based on name or email or phoneNumber
-        throw new UnsupportedOperationException("Unimplemented method 'search'");
+    public List<Contact> search(String field, String keyword) {
+       if(field.equals("name")){
+        return contactRepo.findByNameIgnoreCase(keyword);
+       }else if(field.equals("email")){
+        return contactRepo.findByEmailIgnoreCase(keyword);
+       }
+       else if(field.equals("phone")){
+        return contactRepo.findByPhoneNumber(keyword);
+       }else{
+        return Collections.emptyList();
+       }
     }
 
     @Override

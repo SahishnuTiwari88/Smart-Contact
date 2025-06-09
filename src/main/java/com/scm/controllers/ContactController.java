@@ -35,8 +35,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 @RequestMapping("/user/contacts")
 public class ContactController {
 
-    private final PasswordEncoder passwordEncoder;
-
     private Logger log = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
@@ -47,10 +45,6 @@ public class ContactController {
 
     @Autowired
     private ImageService imageService;
-
-    ContactController(PasswordEncoder passwordEncoder) {
-        this.passwordEncoder = passwordEncoder;
-    }
 
     @RequestMapping("/add")
     public String addContactView(Model model) {
@@ -130,7 +124,7 @@ public class ContactController {
     // to show contacts of logged in user
     @RequestMapping
     public String showContact(@RequestParam(value = "page", defaultValue = "0") int page,
-            @RequestParam(value = "size", defaultValue = ""+AppConstants.PAGE_SIZE) int size,
+            @RequestParam(value = "size", defaultValue = "" + AppConstants.PAGE_SIZE) int size,
             @RequestParam(value = "sortBy", defaultValue = "name") String sortBy,
             @RequestParam(value = "direction", defaultValue = "asc") String direction, Model model,
             Authentication authentication) {
@@ -142,12 +136,22 @@ public class ContactController {
         Page<Contact> contacts = contactService.getByUserId(userId, page, size, sortBy, direction);
         // the above contact has all info related to page like size,content,Number of
         // elements etc
-
         model.addAttribute("contacts", contacts);
         model.addAttribute("pageSize", AppConstants.PAGE_SIZE);
         return "user/contacts";
     }
 
+    // search user based on name or phoneNumber,or email
+    // from form we are getting two parameter i.e. field and keyword that we will
+    // use below using @RequestParam
+    @RequestMapping("/search")
+    public String searchContact(@RequestParam("field") String field, @RequestParam("keyword") String keyword, Model model) {
+        List<Contact> searchedContacts = contactService.search(field, keyword);
+        log.info("field {} keyword {} ", field, keyword);
+        log.info("User deatls : " + searchedContacts.toString());
+        model.addAttribute("searchedContacts", searchedContacts);
+        return "user/searchContact";
+    }
 }
 
 // In case to redirect we mention the endpoint not the page name
@@ -161,4 +165,4 @@ public class ContactController {
 // accessing info there
 // now we access content of the page using "c : ${contacts.getContent()}"
 
-//number=page numer
+// number=page numer

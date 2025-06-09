@@ -22,6 +22,12 @@ public interface ContactRepo extends JpaRepository<Contact, String> {
     @Query("SELECT c FROM Contact c WHERE c.user.id = :userId")
     Page<Contact> findByUserId(@Param("userId") String userId, Pageable pageable);
 
+    List<Contact> findByNameIgnoreCase(String name);
+
+    List<Contact> findByEmailIgnoreCase(String email);
+
+    List<Contact> findByPhoneNumber(String phoneNumber);
+
     // in order to implement pagination we will replace List-->Page(coming from
     // domain.page) and pass one pageble object as argument
 
