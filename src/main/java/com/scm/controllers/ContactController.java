@@ -6,17 +6,21 @@ import java.util.UUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.scm.entities.Contact;
 import com.scm.entities.User;
 import com.scm.forms.contactForm;
+import com.scm.helper.AppConstants;
 import com.scm.helper.Helper;
 import com.scm.services.ContactService;
 import com.scm.services.ImageService;
@@ -31,6 +35,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 @RequestMapping("/user/contacts")
 public class ContactController {
 
+    private final PasswordEncoder passwordEncoder;
+
     private Logger log = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
@@ -41,6 +47,10 @@ public class ContactController {
 
     @Autowired
     private ImageService imageService;
+
+    ContactController(PasswordEncoder passwordEncoder) {
+        this.passwordEncoder = passwordEncoder;
+    }
 
     @RequestMapping("/add")
     public String addContactView(Model model) {
@@ -90,10 +100,10 @@ public class ContactController {
         // 2. process contact picture
         // to check we are getting contact image file or not
         log.info("Contact image info : {} " + contactForm.getContactImage().getOriginalFilename());
-        //generate randome file name & it is public id
+        // generate randome file name & it is public id
         String filename = UUID.randomUUID().toString();
         // image processing code i.e. file upload karne ka code
-        String imageUrl = imageService.uploadImage(contactForm.getContactImage(),filename);
+        String imageUrl = imageService.uploadImage(contactForm.getContactImage(), filename);
 
         // convert contactForm-->contact
         Contact contact = new Contact();
@@ -105,11 +115,10 @@ public class ContactController {
         contact.setFavorite(contactForm.isFavorite());
         contact.setWebsite(contactForm.getWebsite());
         contact.setLinkedeIn(contactForm.getLinkedIn());
-         // set contact picture
+        // set contact picture
         contact.setPicture(imageUrl);
         contact.setCloudinaryImagePublicId(filename);
         contact.setUser(user);
-       
 
         // save contact to db
         contactService.saveContact(contact);
@@ -118,19 +127,38 @@ public class ContactController {
         return "redirect:/user/contacts/add";
     }
 
-    //to show contacts of logged in user
+    // to show contacts of logged in user
     @RequestMapping
-    public String showContact(Model model,Authentication authentication){
+    public String showContact(@RequestParam(value = "page", defaultValue = "0") int page,
+            @RequestParam(value = "size", defaultValue = ""+AppConstants.PAGE_SIZE) int size,
+            @RequestParam(value = "sortBy", defaultValue = "name") String sortBy,
+            @RequestParam(value = "direction", defaultValue = "asc") String direction, Model model,
+            Authentication authentication) {
 
         String LoggedInUser = Helper.getEmailOfLoggedInUser(authentication);
         User userByEmail = userService.getUserByEmail(LoggedInUser);
         String userId = userByEmail.getUserId();
-        //load all the user contact
-        List<Contact> contacts = contactService.getByUserId(userId);
+        // load all the user contact
+        Page<Contact> contacts = contactService.getByUserId(userId, page, size, sortBy, direction);
+        // the above contact has all info related to page like size,content,Number of
+        // elements etc
+
         model.addAttribute("contacts", contacts);
+        model.addAttribute("pageSize", AppConstants.PAGE_SIZE);
         return "user/contacts";
     }
 
 }
 
 // In case to redirect we mention the endpoint not the page name
+
+// we are going to implement pagination so we need to pass size,page number,
+// sorting strategy and the direction of sorting, we can pass those from query
+// parameter
+// and receive in controller using @RequestParam and corresponding need to make
+// change in
+// contact.html because we are implementing pagination so instead of directly
+// accessing info there
+// now we access content of the page using "c : ${contacts.getContent()}"
+
+//number=page numer

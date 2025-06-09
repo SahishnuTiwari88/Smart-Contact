@@ -17,9 +17,7 @@
       <div class="sm:pl-64 pt-16">
         <div class="">
           <h1 class="text-5xl">View Contact Information</h1>
-          <p>
-           All contacts
-          </p>
+          <p>All contacts</p>
           <div class="contact_container p-5">
             <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
               <div
@@ -164,18 +162,22 @@
                       </div>
                     </th>
                     <td class="px-6 py-4">
-                        <i class="fa-solid fa-phone w-4 h-4"></i>
-                        <span data-th-text="*{phoneNumber}"></span>
+                      <i class="fa-solid fa-phone w-4 h-4"></i>
+                      <span data-th-text="*{phoneNumber}"></span>
                     </td>
-                    
+
                     <td class="px-6 py-4">
                       <div class="flex items-center">
                         <div
                           data-th-if="*{favorite}"
-                           class="fa-solid fa-star w-6 h-4">
-                        </div>
-                        <a data-th-href="@{*{website}}" target="_blank"><i class="fa-solid fa-link w-6 h-4"></i></a>
-                         <a data-th-href="@{*{linkedeIn}}" target="_blank"><i class="fa-brands fa-linkedin w-6 h-4"></i></i></a>
+                          class="fa-solid fa-star w-6 h-4"
+                        ></div>
+                        <a data-th-href="@{*{website}}" target="_blank"
+                          ><i class="fa-solid fa-link w-6 h-4"></i
+                        ></a>
+                        <a data-th-href="@{*{linkedeIn}}" target="_blank"
+                          ><i class="fa-brands fa-linkedin w-6 h-4"></i
+                        ></a>
                       </div>
                     </td>
                     <td class="px-6 py-4">
@@ -186,14 +188,89 @@
                       > -->
                       <!--Icons for update,delete,view-->
                       <div>
-                        <a href="http://" target="_blank"><i class="fa-solid fa-trash w-6 h-4"></i></a>
-                        <a href="http://" target="_blank"><i class="fa-solid fa-pen w-6 h-4"></i></a>
-                        <a href="http://" target="_blank" ><i class="fa-regular fa-eye w-6 h-4"></i></a>
+                        <a href="http://" target="_blank"
+                          ><i class="fa-solid fa-trash w-6 h-4"></i
+                        ></a>
+                        <a href="http://" target="_blank"
+                          ><i class="fa-solid fa-pen w-6 h-4"></i
+                        ></a>
+                        <a href="http://" target="_blank"
+                          ><i class="fa-regular fa-eye w-6 h-4"></i
+                        ></a>
                       </div>
                     </td>
                   </tr>
                 </tbody>
               </table>
+              <!--Pagination Component-->
+              <div class="pagination_container bg-white dark:bg-gray-600 p-5">
+                <nav aria-label="Page navigation example">
+                  <ul
+                    class="inline-flex items-center -space-x-px h-10 text-base"
+                  >
+                    <li data-th-unless="${contacts.isFirst()}">
+                      <a
+                        data-th-href="@{'/user/contacts?size='+${pageSize}+'&page='+${contacts.getNumber()-1}}"
+                        href="#"
+                        class="flex items-center justify-center px-4 h-10 ms-0 leading-tight text-gray-500 bg-white border border-e-0 border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                      >
+                        <span class="sr-only">Previous</span>
+                        <svg
+                          class="w-3 h-3 rtl:rotate-180"
+                          aria-hidden="true"
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 6 10"
+                        >
+                          <path
+                            stroke="currentColor"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="M5 1 1 5l4 4"
+                          />
+                        </svg>
+                      </a>
+                    </li>
+                    <li
+                      data-th-each="index : ${#numbers.sequence(0,contacts.totalPages-1)}"
+                    >
+                      <a
+                        data-th-href="@{'/user/contacts?size='+${pageSize}+'&page='+${index}}"
+                        href="#"
+                        data-th-classappend="${index == contacts.getNumber() ? 'bg-blue-200 dark:bg-red-500' :'bg-white'}"
+                        class="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                        ><span data-th-text="${index+1}"></span
+                      ></a>
+                    </li>
+
+                    <li data-th-unless="${contacts.isLast()}">
+                      <a
+                        data-th-href="@{'/user/contacts?size='+${pageSize}+'&page='+${contacts.getNumber()+1}}"
+                        href="#"
+                        class="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                      >
+                        <span class="sr-only">Next</span>
+                        <svg
+                          class="w-3 h-3 rtl:rotate-180"
+                          aria-hidden="true"
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 6 10"
+                        >
+                          <path
+                            stroke="currentColor"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="m1 9 4-4-4-4"
+                          />
+                        </svg>
+                      </a>
+                    </li>
+                  </ul>
+                </nav>
+              </div>
             </div>
           </div>
         </div>

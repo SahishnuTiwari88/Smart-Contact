@@ -5,6 +5,10 @@ import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.scm.entities.Contact;
@@ -60,8 +64,12 @@ public class ContactServiceImpl implements ContactService {
     }
 
     @Override
-    public List<Contact> getByUserId(String userId) {
-        return contactRepo.findByUserId(userId);
+    public Page<Contact> getByUserId(String userId,int pageNo, int size, String sortBy, String direction) {
+       Sort sort =  direction.equalsIgnoreCase("desc") ? Sort.by(sortBy).descending() : Sort.by(sortBy).ascending();
+        Pageable pageable = PageRequest.of(pageNo,size,sort);
+        return contactRepo.findByUserId(userId,pageable);
     }
 
 }
+//in sortBy we mention field on which do sorting
+//in direction we mention ascending or decending order

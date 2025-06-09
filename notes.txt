@@ -372,3 +372,67 @@ Then we use,  data-th-each="c : ${contacts}" to get contacts from model
 If we get picture then we use ' data-th-src="*{picture}"' to show on browser or else we mention default picture onerror load
 Similarly we mention all info that we want to show.
 In the form we will delete,update and view the contact details for that we will use icons.
+
+NoW WE WILL INCLUDE PAGINATION IN PROJECT-->
+first go to contact repository, and change List-->Page and pass Pageble interface
+Pageable is an interface provided by Spring Data JPA.
+
+It is used to pass pagination (and optional sorting) information to a repository method.
+
+✅ Key Points:
+You do not create a Pageable object directly.
+
+Instead, you use PageRequest, which is a concrete class that implements Pageable.
+
+Pageable pageable = PageRequest.of(0, 5);
+This line means:
+
+Page number = 0 (first page)
+
+Page size = 5 (5 records per page)
+PageRequest--> PageRequest is a Spring Data JPA class used to create a Pageable object, which tells the repository:
+Which page to retrieve
+How many items per page
+(Optionally) How to sort the results
+we can mention on what field it needs to be sort for that if we want we can mention sortBy(field for sort)
+and direction(sort in ascending or decending order)
+we have added 
+@RequestParam(value = "page", defaultValue = "0") int page,
+            @RequestParam(value = "size", defaultValue = "4") int size,
+            @RequestParam(value = "sortBy", defaultValue = "name") String sortBy,
+            @RequestParam(value = "direction", defaultValue = "asc") String direction,  in controller for pagination
+
+To check we can pass query like 'http://localhost:8080/user/contacts?size=2&page=1&sortBy=email&direction=desc'
+if we want we can skip some fields also which will take default value from above.
+It will show pagination data, now we need pagination component 
+PAGINATION COMPONENT-->
+A pagination component is a UI part (usually at the bottom of a list) that:
+Shows part of the data (1 page at a time).
+Lets users move between pages using:
+1. Previous button & Next button
+2. (Optionally: page numbers like 1 2 3 4 ...)
+
+✅ Why Do We Use It?
+If you have 100 contacts, you don’t want to show all at once.
+
+So you show 10 per page and use the pagination component to move between them. 
+
+We take pagination component from tailwind css and paste it below where table end in
+'contact.html' i.e from where we are displaying the data, but initially it will only shows dummy page
+so we need to map it. so for that in thymeleaf page we will loop from 1 to 'size'
+'data-th-each="index : ${#numbers.sequence(0,contacts.totalPages)}, where
+1. contacts.totalPages → total number of pages from your Page<Contact> object
+2. #numbers.sequence(0, totalPages) → creates a sequence like: 0, 1, 2, 3, ...(#numbers comes from thymeleaf utility class)
+3. index → current page number in the loop
+
+In AppConstant.java we make PAGE_SIZE as constant then we need to pass it in model and then we can use it in
+THymeleaf page.
+data-th-unless="${contacts.isLast()}" we are passing contacts object to model from there we are using isLast() method.
+To go previous and next we use 
+NOTE-->
+If I'm on the first page, the previous option will not be visible.
+If I'm on any other page like 2, 3, etc., previous is visible.
+At that time, contacts.getNumber() will mention current page number,
+and as soon as I click previous, page number reduces by 1 because we mention contacts.getNumber() - 1,
+and it takes me to the previous page.
+data-th-classappend="${index == contacts.getNumber() ? 'bg-blue-400' :'bg-white'}" highligt the page number
