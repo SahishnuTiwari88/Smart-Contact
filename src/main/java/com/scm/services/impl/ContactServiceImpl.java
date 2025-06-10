@@ -62,15 +62,18 @@ public class ContactServiceImpl implements ContactService {
     // search contact based on field(name,email,phone) and keyword(actual data
     // passed)
     @Override
-    public List<Contact> search(User user, String field, String keyword) {
+    public Page<Contact> search(User user, String field, String keyword, int page, int size, String sortBy,
+            String direction) {
+        Sort sort = direction.equalsIgnoreCase("desc") ? Sort.by(sortBy).descending() : Sort.by(sortBy).ascending();
+        Pageable pageable = PageRequest.of(page, size, sort);
         if (field.equals("name")) {
-            return contactRepo.findByUserAndNameIgnoreCase(user, keyword);
+            return contactRepo.findByUserAndNameIgnoreCase(user, keyword, pageable);
         } else if (field.equals("email")) {
-            return contactRepo.findByUserAndEmailIgnoreCase(user, keyword);
+            return contactRepo.findByUserAndEmailIgnoreCase(user, keyword, pageable);
         } else if (field.equals("phone")) {
-            return contactRepo.findByUserAndPhoneNumber(user, keyword);
+            return contactRepo.findByUserAndPhoneNumber(user, keyword, pageable);
         } else {
-            return Collections.emptyList();
+            return null;
         }
     }
 

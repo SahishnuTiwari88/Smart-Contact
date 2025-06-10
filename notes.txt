@@ -443,3 +443,17 @@ button so that we can search based on name,phone,email. And we want like the con
 from the database so for that we will pass 'user'(logged in) information also as a parameter.
 contactRepo.findByUserAndNameIgnoreCase(user, keyword);  we have done this because we need to find contact info saved 
 by logged in user only not from entire DB.
+
+NOW GOING TO IMPLEMENT PAGINATION IN SEARCH CONTACT-->
+In order to use pagination we need SearchContactForm.java with 2 fields(field,keyword) and create blank object for this class
+in ContactController.java in 'public String showContact method and pass to model' so that blank object will be available in the
+contact.html page, when click search it will sent to 'user/contacts/search' endpoint in 'ContactController.java' and we need 
+the field and keyword here so we will use @ModelAttribute to bind html data with SearchContactForm. 
+Fetch the field and keyword from @ModelAttribute SearchContactForm and use in '/search' endpoint
+We also need to pass 'page,size,sortby,direction' to implement pagination. Then make corresponding changes in the 
+searchContact.html for pagination to work and also the field and keyword in form will be populated with
+the search detail.
+
+
+In ContactController.java we replace public String searchContact(@RequestParam("field") String field,
+ @RequestParam("keyword") String keyword) with @ModelAttribute 

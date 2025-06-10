@@ -25,7 +25,7 @@ public interface ContactService {
     void deleteContact(String id);
 
     // serach contact
-    List<Contact> search(User user,String field, String keyword);
+    Page<Contact> search(User user, String field, String keyword, int page, int size, String sortBy, String direction);
     // where field might be name,email or phonenumber and keyword will hold actual
     // value
 

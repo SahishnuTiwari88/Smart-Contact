@@ -19,6 +19,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.scm.entities.Contact;
 import com.scm.entities.User;
+import com.scm.forms.SearchContactForm;
 import com.scm.forms.contactForm;
 import com.scm.helper.AppConstants;
 import com.scm.helper.Helper;
@@ -136,8 +137,10 @@ public class ContactController {
         Page<Contact> contacts = contactService.getByUserId(userId, page, size, sortBy, direction);
         // the above contact has all info related to page like size,content,Number of
         // elements etc
-        model.addAttribute("contacts", contacts);
         model.addAttribute("pageSize", AppConstants.PAGE_SIZE);
+        // passing blank object of SearchContactForm.java in contact.html
+        model.addAttribute("searchContact", new SearchContactForm());
+        model.addAttribute("contacts", contacts);
         return "user/contacts";
     }
 
@@ -145,13 +148,22 @@ public class ContactController {
     // from form we are getting two parameter i.e. field and keyword that we will
     // use below using @RequestParam
     @RequestMapping("/search")
-    public String searchContact(@RequestParam("field") String field, @RequestParam("keyword") String keyword,
+    public String searchContact(@ModelAttribute SearchContactForm searchContactForm,
+            @RequestParam(value = "page", defaultValue = "0") int page,
+            @RequestParam(value = "size", defaultValue = "" + AppConstants.PAGE_SIZE) int size,
+            @RequestParam(value = "sortBy", defaultValue = "name") String sortBy,
+            @RequestParam(value = "direction", defaultValue = "asc") String direction,
             Model model, Authentication authentication) {
-                String loggedUser = Helper.getEmailOfLoggedInUser(authentication);
-                User user = userService.getUserByEmail(loggedUser);
-        List<Contact> searchedContacts = contactService.search(user,field, keyword);
+        String field = searchContactForm.getField();
+        String keyword = searchContactForm.getKeyword();
+        String loggedUser = Helper.getEmailOfLoggedInUser(authentication);
+        User user = userService.getUserByEmail(loggedUser);
+        Page<Contact> searchedContacts = contactService.search(user, field, keyword, page, size, sortBy, direction);
+    
         log.info("field {} keyword {} ", field, keyword);
         log.info("User deatls : " + searchedContacts.toString());
+        model.addAttribute("pageSize", AppConstants.PAGE_SIZE);
+        model.addAttribute("searchContactForm", searchContactForm);
         model.addAttribute("searchedContacts", searchedContacts);
         return "user/searchContact";
     }

@@ -16,23 +16,23 @@
 
       <div class="sm:pl-64 pt-16">
         <h1 class="text-5xl">Search Result</h1>
-        <p>
-          Searched Contact
-        </p>
+        <p>Searched Contact</p>
         <div class="contact_container p-5">
           <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
-            <form data-th-action="@{/user/contacts/search}">
+            <form
+              data-th-action="@{/user/contacts/search}"
+              data-th-object="${searchContactForm}"
+            >
               <div
                 class="flex space-x-4 p-5 items-center flex-column flex-wrap md:flex-row space-y-4 md:space-y-0 pb-4 bg-white dark:bg-gray-900"
               >
                 <!--Select box-->
                 <div>
                   <select
-                    name="field"
-                    id="countries_disabled"
+                    data-th-field="*{field}"
                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                   >
-                    <option selected>Select field</option>
+                    <option selected value="">Select field</option>
                     <option value="name">name</option>
                     <option value="phone">phone</option>
                     <option value="email">email</option>
@@ -60,9 +60,8 @@
                     </svg>
                   </div>
                   <input
-                    name="keyword"
+                    data-th-field="*{keyword}"
                     type="text"
-                    id="table-search-users"
                     class="block p-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                     placeholder="Search for users"
                   />
@@ -158,12 +157,12 @@
               </tbody>
             </table>
             <!--Pagination Component-->
-            <!-- <div class="pagination_container bg-white dark:bg-gray-600 p-5">
+            <div class="pagination_container bg-white dark:bg-gray-600 p-5">
               <nav aria-label="Page navigation example">
                 <ul class="inline-flex items-center -space-x-px h-10 text-base">
-                  <li data-th-unless="${contacts.isFirst()}">
+                  <li data-th-unless="${searchedContacts.isFirst()}">
                     <a
-                      data-th-href="@{'/user/contacts?size='+${pageSize}+'&page='+${contacts.getNumber()-1}}"
+                      data-th-href="@{'/user/contacts/search?size='+${pageSize}+'&page='+${searchedContacts.getNumber()-1}+'&field='+${searchContactForm.field}+'&keyword='+${searchContactForm.keyword}}"
                       href="#"
                       class="flex items-center justify-center px-4 h-10 ms-0 leading-tight text-gray-500 bg-white border border-e-0 border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
                     >
@@ -186,20 +185,20 @@
                     </a>
                   </li>
                   <li
-                    data-th-each="index : ${#numbers.sequence(0,contacts.totalPages-1)}"
+                    data-th-each="index : ${#numbers.sequence(0,searchedContacts.totalPages-1)}"
                   >
                     <a
-                      data-th-href="@{'/user/contacts?size='+${pageSize}+'&page='+${index}}"
+                      data-th-href="@{'/user/contacts/search?size='+${pageSize}+'&field='+${searchContactForm.field}+'&keyword='+${searchContactForm.keyword}+'&page='+${index}}"
                       href="#"
-                      data-th-classappend="${index == contacts.getNumber() ? 'bg-blue-200 dark:bg-red-500' :'bg-white'}"
+                      data-th-classappend="${index == searchedContacts.getNumber() ? 'bg-blue-200 dark:bg-red-500' :'bg-white'}"
                       class="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
                       ><span data-th-text="${index+1}"></span
                     ></a>
                   </li>
 
-                  <li data-th-unless="${contacts.isLast()}">
+                  <li data-th-unless="${searchedContacts.isLast()}">
                     <a
-                      data-th-href="@{'/user/contacts?size='+${pageSize}+'&page='+${contacts.getNumber()+1}}"
+                      data-th-href="@{'/user/contacts/search?size='+${pageSize}+'&page='+${searchedContacts.getNumber()+1}+'&field='+${searchContactForm.field}+'&keyword='+${searchContactForm.keyword}}"
                       href="#"
                       class="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
                     >
@@ -223,7 +222,10 @@
                   </li>
                 </ul>
               </nav>
-            </div> -->
+            </div>
+            
+            <!-- Pagination Component -->
+            
           </div>
         </div>
       </div>
