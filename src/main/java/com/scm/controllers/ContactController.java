@@ -145,8 +145,11 @@ public class ContactController {
     // from form we are getting two parameter i.e. field and keyword that we will
     // use below using @RequestParam
     @RequestMapping("/search")
-    public String searchContact(@RequestParam("field") String field, @RequestParam("keyword") String keyword, Model model) {
-        List<Contact> searchedContacts = contactService.search(field, keyword);
+    public String searchContact(@RequestParam("field") String field, @RequestParam("keyword") String keyword,
+            Model model, Authentication authentication) {
+                String loggedUser = Helper.getEmailOfLoggedInUser(authentication);
+                User user = userService.getUserByEmail(loggedUser);
+        List<Contact> searchedContacts = contactService.search(user,field, keyword);
         log.info("field {} keyword {} ", field, keyword);
         log.info("User deatls : " + searchedContacts.toString());
         model.addAttribute("searchedContacts", searchedContacts);

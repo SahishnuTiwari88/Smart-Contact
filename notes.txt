@@ -439,4 +439,7 @@ data-th-classappend="${index == contacts.getNumber() ? 'bg-blue-400' :'bg-white'
 
 NOW WE ARE GOING TO SEARCH CONTACT BASED ON NAME,EMAIL,CONTACT-->
 For that we first we search 'multiple options' on flowbite take it and paster it in contact.html then make a search
-button so that we can search based on name,phone,email
+button so that we can search based on name,phone,email. And we want like the contacts saved by logged in user used get fetched
+from the database so for that we will pass 'user'(logged in) information also as a parameter.
+contactRepo.findByUserAndNameIgnoreCase(user, keyword);  we have done this because we need to find contact info saved 
+by logged in user only not from entire DB.

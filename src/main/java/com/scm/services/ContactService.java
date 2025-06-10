@@ -6,6 +6,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import com.scm.entities.Contact;
+import com.scm.entities.User;
 
 public interface ContactService {
     // add contact to db
@@ -24,7 +25,7 @@ public interface ContactService {
     void deleteContact(String id);
 
     // serach contact
-    List<Contact> search(String field, String keyword);
+    List<Contact> search(User user,String field, String keyword);
     // where field might be name,email or phonenumber and keyword will hold actual
     // value
 

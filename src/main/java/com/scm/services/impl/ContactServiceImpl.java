@@ -13,6 +13,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.scm.entities.Contact;
+import com.scm.entities.User;
 import com.scm.exceptions.ResourceNotFoundException;
 import com.scm.repositories.ContactRepo;
 import com.scm.services.ContactService;
@@ -58,28 +59,28 @@ public class ContactServiceImpl implements ContactService {
         // or we can first find by id then pass entity to delete
     }
 
-    //search contact based on field(name,email,phone) and keyword(actual data passed)
+    // search contact based on field(name,email,phone) and keyword(actual data
+    // passed)
     @Override
-    public List<Contact> search(String field, String keyword) {
-       if(field.equals("name")){
-        return contactRepo.findByNameIgnoreCase(keyword);
-       }else if(field.equals("email")){
-        return contactRepo.findByEmailIgnoreCase(keyword);
-       }
-       else if(field.equals("phone")){
-        return contactRepo.findByPhoneNumber(keyword);
-       }else{
-        return Collections.emptyList();
-       }
+    public List<Contact> search(User user, String field, String keyword) {
+        if (field.equals("name")) {
+            return contactRepo.findByUserAndNameIgnoreCase(user, keyword);
+        } else if (field.equals("email")) {
+            return contactRepo.findByUserAndEmailIgnoreCase(user, keyword);
+        } else if (field.equals("phone")) {
+            return contactRepo.findByUserAndPhoneNumber(user, keyword);
+        } else {
+            return Collections.emptyList();
+        }
     }
 
     @Override
-    public Page<Contact> getByUserId(String userId,int pageNo, int size, String sortBy, String direction) {
-       Sort sort =  direction.equalsIgnoreCase("desc") ? Sort.by(sortBy).descending() : Sort.by(sortBy).ascending();
-        Pageable pageable = PageRequest.of(pageNo,size,sort);
-        return contactRepo.findByUserId(userId,pageable);
+    public Page<Contact> getByUserId(String userId, int pageNo, int size, String sortBy, String direction) {
+        Sort sort = direction.equalsIgnoreCase("desc") ? Sort.by(sortBy).descending() : Sort.by(sortBy).ascending();
+        Pageable pageable = PageRequest.of(pageNo, size, sort);
+        return contactRepo.findByUserId(userId, pageable);
     }
 
 }
-//in sortBy we mention field on which do sorting
-//in direction we mention ascending or decending order
+// in sortBy we mention field on which do sorting
+// in direction we mention ascending or decending order
